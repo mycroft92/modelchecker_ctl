@@ -36,6 +36,7 @@ pg    = existsGB(ts,Not(label(ts,'g')))
 print (checkProperty(ts,pg))
 print (findStates(ts,pg))
 
+#for all global g = not(there exists future not g)
 pnotg = Not(existsCUB(ts,true(),Not(label(ts,'g'))))
 print (checkProperty(ts,pg))
 print (findStates(ts,pg))

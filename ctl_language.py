@@ -18,7 +18,7 @@ def  existsCUB(ts,cFunc,bFunc):
         temp = And(cFunc,temp)
         #fj+1 = fj | (Xc(x) & #x'(del(x,x')&fj(x')))
         ngen = Or(gen,temp)
-        if (gen.equivalent(ngen)): #fj+1 ==fj
+        if (gen.to_dnf().equivalent(ngen.to_dnf())): #fj+1 ==fj
             break
         gen  = ngen
 
@@ -29,7 +29,7 @@ def existsGB(ts,bFunc):
     gen   = bFunc
     while True:
         #del(x,x') & fj(x')( here fj is represented by gen)
-        print(gen.compose(ts.submap))
+
         temp = ts.transitionFunction & gen.compose(ts.submap)
 
         #There exists part #x'(del(x,x')&fj(x'))
@@ -38,7 +38,7 @@ def existsGB(ts,bFunc):
         #fj+1 = fj & (#x'(del(x,x')&fj(x')))
         ngen = And(gen,temp).simplify()
         #print(ngen)
-        if (gen.equivalent(ngen)):# fj+1 ==fj
+        if (gen.to_dnf().equivalent(ngen.to_dnf())):# fj+1 ==fj
             break
         gen  = ngen
     return gen
