@@ -21,16 +21,16 @@ class TS(object):
         self.nVars       = math.ceil(math.log(len(self.nodes)))
         self._min        = min(self.nodes)
         self._max        = max(self.nodes)
-        self.stateVar    = bddvars('x',self.nVars)
-        self.nextVar     = bddvars('x_',self.nVars)
+        self.stateVar    = exprvars('x',self.nVars)
+        self.nextVar     = exprvars('x_',self.nVars)
         self.submap      = {}
         self.zeroNext    = {}
         self.oneNext     = {}
         #I created one stateVar for each state
 
         #substituion map for each variable and making next states all 0 and 1 hashes
+        self.submap      = dict(zip(self.stateVar,self.nextVar))
         for i in range (0,self.nVars):
-            self.submap[self.stateVar[i]]  = self.nextVar[i]
             self.zeroNext[self.nextVar[i]] = False
             self.oneNext[self.nextVar[i]]  = True
 

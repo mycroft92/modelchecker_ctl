@@ -43,6 +43,15 @@ def existsGB(ts,bFunc):
         gen  = ngen
     return gen
 
+def existsNext(ts,func):
+    #checks there exists next (func)
+    gen  = func
+    #del(x,x') & f(x')( here f is represented by gen)
+    temp = ts.transitionFunction & gen.compose(ts.submap)
+    #There exists part #x'(del(x,x')&f(x'))
+    gen  = Or(temp.compose(ts.zeroNext),temp.compose(ts.oneNext))
+    return gen
+
 def implies(ts,aFunc,bFunc):
     gen = Or(Not(aFunc),bFunc)
     return gen
@@ -55,14 +64,15 @@ def label(ts,_label):
         print ("[!]The label "+_label+" doesnot appear in labels of given transition system. Please recheck!")
         raise (e)
 
-def checkProperty(ts,propertyFunction):
-    #returns true if ts satisfies property
-    res = True if implies(ts,ts.initFunction,propertyFunction) else False
-    print("[*]Given transition system satisfies the property " if res else "")
-    return (res)
-
 def findStates(ts,propertyFunction):
     #returns all the states that satisfy propertyFunction
-    gen = [i for i in ts.nodes if (implies(ts,ts.stateFunction[i],propertyFunction))]
+    gen = [i for i in ts.nodes if ((ts.stateFunction[i]&propertyFunction).to_dnf().equivalent(ts.stateFunction[i].to_dnf()))]
     print ("[*]States satisfying property: "+str(gen))
     return gen
+
+def checkProperty(ts,propertyFunction):
+    #returns true if ts satisfies property
+    states = findStates(ts,propertyFunction)
+    res    = True if set(ts.init) < set(states) else False
+    print("[*]Given transition system satisfies the property " if res else "[!]Transition system doesnot satisfy the property")
+    return (res)
