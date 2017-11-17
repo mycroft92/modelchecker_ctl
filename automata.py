@@ -53,6 +53,14 @@ class TS(object):
             self.transitionFunction = self.transitionFunction | (self.stateFunction[x] &self.nextFunction[y])
         self.initFunction     = Or(*[self.stateFunction[i] for i in self.init])
 
+    def existsX_func(self,func):
+        out = func
+        for i in self.nextVar:
+            out  = Or(out.compose({i:False}),out.compose({i:True}))
+        print ("out ")
+        print (out)
+        return out
+
 
     def _gen_label(self):
         self._gen_charfunction()

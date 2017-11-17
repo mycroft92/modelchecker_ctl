@@ -12,13 +12,14 @@ def  existsCUB(ts,cFunc,bFunc):
         #del(x,x') & fj(x')( here fj is represented by gen)
         temp = And(gen.compose(ts.submap) , ts.transitionFunction)
         #There exists #x'(del(x,x')&fj(x'))
-        temp = Or(temp.compose(ts.zeroNext),temp.compose(ts.oneNext))
+        temp = ts.existsX_func(temp)
 
         #Xc(x) & #x'(del(x,x')&fj(x'))
-        temp = And(cFunc,temp)
+        if cFunc != True:
+            temp = And(cFunc,temp)
         #fj+1 = fj | (Xc(x) & #x'(del(x,x')&fj(x')))
         ngen = Or(gen,temp)
-        if (gen.to_dnf().equivalent(ngen.to_dnf())): #fj+1 ==fj
+        if (gen.equivalent(ngen)): #fj+1 ==fj
             break
         gen  = ngen
 
@@ -27,18 +28,21 @@ def  existsCUB(ts,cFunc,bFunc):
 
 def existsGB(ts,bFunc):
     gen   = bFunc
+
+
     while True:
         #del(x,x') & fj(x')( here fj is represented by gen)
 
         temp = ts.transitionFunction & gen.compose(ts.submap)
 
+
         #There exists part #x'(del(x,x')&fj(x'))
-        temp = Or(temp.compose(ts.zeroNext),temp.compose(ts.oneNext))
+        temp = ts.existsX_func(temp)
 
         #fj+1 = fj & (#x'(del(x,x')&fj(x')))
         ngen = And(gen,temp).simplify()
         #print(ngen)
-        if (gen.to_dnf().equivalent(ngen.to_dnf())):# fj+1 ==fj
+        if (gen.equivalent(ngen)):# fj+1 ==fj
             break
         gen  = ngen
     return gen
