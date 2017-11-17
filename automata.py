@@ -18,7 +18,7 @@ class TS(object):
         self._gen_label()
 
     def _gen_charfunction(self):
-        self.nVars       = math.ceil(math.log(len(self.nodes)))
+        self.nVars       = int(math.ceil(math.log(len(self.nodes))))
         self._min        = min(self.nodes)
         self._max        = max(self.nodes)
         self.stateVar    = exprvars('x',self.nVars)
@@ -57,8 +57,6 @@ class TS(object):
         out = func
         for i in self.nextVar:
             out  = Or(out.compose({i:False}),out.compose({i:True}))
-        print ("out ")
-        print (out)
         return out
 
 

@@ -38,7 +38,7 @@ def existsGB(ts,bFunc):
 
         #There exists part #x'(del(x,x')&fj(x'))
         temp = ts.existsX_func(temp)
-
+        
         #fj+1 = fj & (#x'(del(x,x')&fj(x')))
         ngen = And(gen,temp).simplify()
         #print(ngen)
@@ -70,7 +70,7 @@ def label(ts,_label):
 
 def findStates(ts,propertyFunction):
     #returns all the states that satisfy propertyFunction
-    gen = [i for i in ts.nodes if ((ts.stateFunction[i]&propertyFunction).to_dnf().equivalent(ts.stateFunction[i].to_dnf()))]
+    gen = [i for i in ts.nodes if ((ts.stateFunction[i]&propertyFunction).equivalent(ts.stateFunction[i]))]
     print ("[*]States satisfying property: "+str(gen))
     return gen
 
